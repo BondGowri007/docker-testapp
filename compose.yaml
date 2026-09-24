@@ -7,7 +7,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: qwerty
     container_name: mongo
-    
+    volumes:
+      - mongodb:/data/db
+    networks:
+      - mynetwork    
   mongo-express:
     image: mongo-express
     ports:
@@ -17,9 +20,19 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: qwerty
       ME_CONFIG_MONGODB_URL: mongodb://admin:qwerty@mongo:27017/
     container_name: mongo-express
+    networks:
+      - mynetwork
     
   app:
     image: gowrishankar1426/testapp:v2
     ports:
       - 5050:5050
+    networks:
+      - mynetwork
   
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  mongodb:
